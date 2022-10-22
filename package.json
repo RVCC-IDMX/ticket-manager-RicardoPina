@@ -15,6 +15,7 @@
       "*/*.css"
     ]
   },
+  "type": "commonjs",
   "events": {
     "start": "cls || clear"
   },
