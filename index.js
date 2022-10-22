@@ -25,7 +25,7 @@ ticketManager.on('buy', (email, price, timestamp) => {
 });
 
 ticketManager.on('error', (error) => {
-  console.error(`Gracefully handling our error: ${error}`);
+  console.error(chalk.bgRed(`Gracefully handling our error: ${error}`));
 });
 
 colorize(`\nWe have ${ticketManager.listenerCount('buy')} listener(s) for the ${underline('buy')} event`, 'blue');

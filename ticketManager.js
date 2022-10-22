@@ -1,5 +1,4 @@
-// import chalk from 'chalk';
-// const { log } = console;
+const chalk = require('chalk');
 
 const EventEmitter = require('events');
 
@@ -11,12 +10,12 @@ class TicketManager extends EventEmitter {
 
   buy(email, price) {
     if (this.supply > 0) {
-      this.supply--;
+      this.supply -= 1;
       this.emit('buy', email, price, Date.now());
       return;
     }
 
-    this.emit('error', new Error('There are no more tickets left to purchase'));
+    this.emit('error', new Error(chalk.bgRed('There are no more tickets left to purchase')));
   }
 }
 
