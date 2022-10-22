@@ -1,10 +1,23 @@
+const chalk = require('chalk');
 const TicketManager = require('./ticketManager');
 const EmailService = require('./emailService');
 const DatabaseService = require('./databaseService');
 
+const { log } = console;
 const ticketManager = new TicketManager(3);
 const emailService = new EmailService();
 const databaseService = new DatabaseService();
+
+function underline(string) {
+  return chalk.underline(string);
+}
+function colorize(string, fontcolor) {
+  return log(chalk[fontcolor](string));
+}
+
+function bgColorize(string, fontcolor) {
+  return log(chalk[fontcolor](`${string}`));
+}
 
 ticketManager.on('buy', (email, price, timestamp) => {
   emailService.send(email);
@@ -15,20 +28,28 @@ ticketManager.on('error', (error) => {
   console.error(`Gracefully handling our error: ${error}`);
 });
 
-console.log(`We have ${ticketManager.listenerCount('buy')} listener(s) for the buy event`);
-console.log(`We have ${ticketManager.listenerCount('error')} listener(s) for the error event`);
+colorize(`\nWe have ${ticketManager.listenerCount('buy')} listener(s) for the ${underline('buy')} event`, 'blue');
+
+colorize(`We have ${ticketManager.listenerCount('error')} listener(s) for the ${underline('error')} event\n`, 'red');
 
 const onBuy = () => {
-  console.log('I will be removed soon');
+  colorize('\nI will be removed soon\n', 'yellow');
 };
+
 ticketManager.on('buy', onBuy);
-console.log(`We added a new event listener bringing our total count for the buy event to: ${ticketManager.listenerCount('buy')}`);
+
+colorize(`We added a new event listener bringing our \ntotal count for the ${chalk.yellowBright.underline('buy')} event to: ${chalk.yellowBright(ticketManager.listenerCount('buy'))}\n`, 'gray');
+
 ticketManager.buy('test@email', 20);
 ticketManager.off('buy', onBuy);
 
-console.log(`We now have: ${ticketManager.listenerCount('buy')} listener(s) for the buy event`);
+colorize(`We now have: ${ticketManager.listenerCount('buy')} listener(s) for the buy event\n`, 'blue');
+
 ticketManager.buy('test@email', 20);
 ticketManager.removeAllListeners('buy');
-console.log(`We have ${ticketManager.listenerCount('buy')} listeners for the buy event`);
+
+colorize(`\nWe have ${ticketManager.listenerCount('buy')} listeners for the buy event\n`, 'blue');
+
 ticketManager.buy('test@email', 20);
-console.log('The last ticket was bought');
+
+bgColorize('The last ticket was bought', 'bgGreen');
